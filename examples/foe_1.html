@@ -1,0 +1,90 @@
+<!DOCTYPE HTML>
+<html lang="en">
+	<head>
+		<title>PP.js - Mr Elk think too much</title>
+		<meta charset="utf-8">
+                <meta property="og:title" content="PP.js - Mr Elk think too much" />
+                <meta property="og:type" content="website" />
+                <meta property="og:url" content="http://whiteflashwhitehit.com/content/webgl/PP/foe_1.html" />
+                <meta property="og:image" content="http://whiteflashwhitehit.com/content/webgl/PP/asset/thumb4.jpg" />
+                <meta property="og:site_name" content="www.whiteflashwhitehit.com" />
+                
+		<meta property="og:description" content="Check out this webgl experience made by @rdad and powered by three.js & PP.js" />
+                <link rel="image_src" href="http://whiteflashwhitehit.com/content/webgl/PP/asset/thumb4.jpg" />
+              
+                <script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
+                <link rel="stylesheet" type="text/css" href="asset/main.css">
+                <script type="text/javascript" src="js/Three.js"></script>           
+                <script type="text/javascript" src="js/PPDebug.js"></script>
+                <script type="text/javascript" src="js/DAT.GUI.min.js"></script>
+                <script type="text/javascript" src="js/common.js"></script>
+                
+        </head>
+
+	<body>
+            <div id="container"></div>
+            <div id="info" style="height:260px">
+                <h3>The Elk</h3>
+                <p>Development by <a href="http://twitter.com/#!/rdad" target="_blank">@rdad</a><a href="http://www.whiteflashwhitehit.com" target="_blank">www.whiteflashwhitehit.com</a></p>
+                <p>Powered by <a href="http://www.khronos.org/webgl/" target="_blank">WebGL</a><a href="https://github.com/mrdoob/three.js" target="_blank">Three.js</a><a href="https://github.com/rdad/PP.js" target="_blank">PP.js</a></p>
+
+                <p>Shader credits: <a href="http://www.everyday3d.com/" target="_blank">Bartek Drozdz</a>
+                <p>Thanks to <a href="http://mrdoob.com/" target="_blank">MrDoob</a><a href="https://plus.google.com/116531818532515270387/posts" target="_blank">Mikael Emtinger</a><a href="http://mirada.com/" target="_blank">Mirada</a></p>
+                <p>This demo is a part of <a href="http://whiteflashwhitehit.com/content/webgl/FOE/" target="_blank">Fly over England</a></p>
+
+                <div id="share">  
+                       <a rel="nofollow" href="http://www.facebook.com/share.php?u=http://whiteflashwhitehit.com/content/webgl/PP/foe_1.html" onclick="return fbs_click()" target="_blank"><img src="asset/bt_fb.png" title="share on facebook" /></a>
+                        <a href="http://twitter.com/share?text=Check+out+this+webgl+experience+made+by+%40rdad+%2f%2f+powered+by+three.js+%26+PP.js+%23welgl&url=http://whiteflashwhitehit.com/content/webgl/PP/foe_1.html" target="_blank"><img src="asset/bt_twitter.png" title="share on twitter" /></a>
+                        <g:plusone size="small" count="false" href="http://whiteflashwhitehit.com/content/webgl/PP/foe_1.html"></g:plusone>
+                  </div>
+            </div>
+            <div id="infoBt">
+                <a href="#" onclick="showInfo()"><img src="asset/info.png" /></a>
+            </div>
+            
+                
+            <div id="progress">
+                <div id="barre"></div>
+            </div>
+                <script type="text/javascript" src="foe_1.js"></script>
+                <script type="x-shader/x-vertex" id="vs-particle">
+
+			uniform float amplitude;
+			attribute float size;
+			attribute vec3 customColor;
+
+			varying vec3 vColor;
+
+			void main() {
+
+				vColor = customColor;
+
+				vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
+
+				//gl_PointSize = size;
+				gl_PointSize = size * ( 300.0 / length( mvPosition.xyz ) );
+
+				gl_Position = projectionMatrix * mvPosition;
+
+			}
+
+		</script>
+
+		<script type="x-shader/x-fragment" id="fs-particle">
+
+			uniform vec3 color;
+			uniform sampler2D texture;
+
+			varying vec3 vColor;
+
+			void main() {
+
+				gl_FragColor = vec4( color * vColor, 1.0 );
+				gl_FragColor = gl_FragColor * texture2D( texture, gl_PointCoord  );
+
+			}
+
+		</script>
+
+	</body>
+</html>

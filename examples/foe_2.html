@@ -1,0 +1,78 @@
+<!DOCTYPE HTML>
+<html lang="en">
+	<head>
+		<title>PP.js - Image volume</title>
+		<meta charset="utf-8">
+                 <meta property="og:title" content="PP.js - Image volume" />
+                <meta property="og:type" content="website" />
+                <meta property="og:url" content="http://whiteflashwhitehit.com/content/webgl/PP/foe_2.html" />
+                <meta property="og:image" content="http://whiteflashwhitehit.com/content/webgl/PP/asset/thumb5.jpg" />
+                <meta property="og:site_name" content="www.whiteflashwhitehit.com" />
+                
+		<meta property="og:description" content="Check out this webgl experience made by @rdad and powered by three.js & PP.js" />
+                <link rel="image_src" href="http://whiteflashwhitehit.com/content/webgl/PP/asset/thumb5.jpg" />
+              
+		<script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
+                <link rel="stylesheet" type="text/css" href="asset/main.css">
+                <script type="text/javascript" src="js/Three.js"></script>
+                <script type="text/javascript" src="js/PP.js"></script>
+                <script type="text/javascript" src="js/common.js"></script>
+                <script type="text/javascript" src="js/DAT.GUI.min.js"></script>
+	</head>
+
+	<body>
+                <div id="info" style="height:240px">
+                <h3>Image volume</h3>
+                <p>Development by <a href="http://twitter.com/#!/rdad" target="_blank">@rdad</a><a href="http://www.whiteflashwhitehit.com" target="_blank">www.whiteflashwhitehit.com</a></p>
+                <p>Powered by <a href="http://www.khronos.org/webgl/" target="_blank">WebGL</a><a href="https://github.com/mrdoob/three.js" target="_blank">Three.js</a><a href="https://github.com/rdad/PP.js" target="_blank">PP.js</a></p>
+
+                <p>Image credits: <a href="http://www.flickr.com/photos/onformative/sets/72157626067623920/" target="_blank">onformative</a>
+                <p>Thanks to <a href="http://mrdoob.com/" target="_blank">MrDoob</a></p>
+                <p>This demo is a part of <a href="http://whiteflashwhitehit.com/content/webgl/FOE/" target="_blank">Fly over England</a></p>
+                
+                <div id="share">  
+                    <a rel="nofollow" href="http://www.facebook.com/share.php?u=http://whiteflashwhitehit.com/content/webgl/PP/foe_2.html" onclick="return fbs_click()" target="_blank"><img src="asset/bt_fb.png" title="share on facebook" /></a>
+                    <a href="http://twitter.com/share?text=Check+out+this+webgl+experience+made+by+%40rdad+%2f%2f+powered+by+three.js+%26+PP.js+%23welgl&url=http://whiteflashwhitehit.com/content/webgl/PP/foe_2.html" target="_blank"><img src="asset/bt_twitter.png" title="share on twitter" /></a>
+                    <g:plusone size="small" count="false" href="http://whiteflashwhitehit.com/content/webgl/PP/foe_2.html"></g:plusone>
+                  </div>
+            </div>
+            <div id="infoBt">
+                <a href="#" onclick="showInfo()"><img src="asset/info.png" /></a>
+            </div>
+            
+                <div id="container"></div>
+                    <div id="progress">
+                        <div id="barre"></div>
+                    </div>
+		
+                <script type="text/javascript" src="foe_2.js"></script>
+
+                <!-- Image volume fragment shader -->
+		<script id="fs-hdr" type="x-shader/x-fragment">
+			uniform sampler2D   tDiffuse;
+			uniform float       bias;
+
+			varying vec2  vUv;
+
+			void main(void)
+			{
+				vec4 color = texture2D( tDiffuse, vUv );
+                                float alpha = 1.0;                                 
+                                if(color.r<bias)       alpha = 0.0;
+				gl_FragColor = vec4( color.rgb, alpha );
+			}
+		</script>
+
+		<!-- Image volume vertex shader -->
+		<script id="vs-hdr" type="x-shader/x-vertex">
+			varying vec2 vUv;
+
+			void main(void)
+			{
+				vUv  = uv;
+				gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+			}
+		</script>
+
+	</body>
+</html>

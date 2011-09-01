@@ -1,0 +1,178 @@
+<!DOCTYPE HTML>
+<html lang="en">
+	<head>
+		<title>Forest</title>
+		<meta charset="utf-8">
+                
+                <meta property="og:title" content="PP.js - Mystic forest" />
+                <meta property="og:type" content="website" />
+                <meta property="og:url" content="http://whiteflashwhitehit.com/content/webgl/PP/forest.html" />
+                <meta property="og:image" content="http://whiteflashwhitehit.com/content/webgl/PP/asset/thumb6.jpg" />
+                <meta property="og:site_name" content="www.whiteflashwhitehit.com" />
+                
+		<meta property="og:description" content="Check out this webgl experience made by @rdad and powered by three.js & PP.js" />
+                <link rel="image_src" href="http://whiteflashwhitehit.com/content/webgl/PP/asset/thumb6.jpg" />
+               
+		<script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
+                <link rel="stylesheet" type="text/css" href="asset/main.css">
+		<script type="text/javascript" src="js/Three.js"></script>
+                <script type="text/javascript" src="js/common.js"></script>
+                <script type="text/javascript" src="js/PPDebug.js"></script>
+                <script type="text/javascript" src="js/DAT.GUI.min.js"></script>
+	</head>
+	<body>
+            <div id="container" style="display:block"></div>
+            <div id="info" style="height:260px">
+                <h3>Mystic forest</h3>
+                <p>Development by <a href="http://twitter.com/#!/rdad" target="_blank">@rdad</a><a href="http://www.whiteflashwhitehit.com" target="_blank">www.whiteflashwhitehit.com</a></p>
+                <p>Powered by <a href="http://www.khronos.org/webgl/" target="_blank">WebGL</a><a href="https://github.com/mrdoob/three.js" target="_blank">Three.js</a><a href="https://github.com/rdad/PP.js" target="_blank">PP.js</a></p>
+
+                <p>Shader credits: <a href="http://madebyevan.com" target="_blank">Evan Wallace</a>
+                <p>Thanks to <a href="http://mrdoob.com/" target="_blank">MrDoob</a><a href="http://alteredqualia.com/" target="_blank">Alteredqualia</a><a href="http://aerotwist.com" target="_blank">Aerotwist</a></p>
+                
+                <div id="share">  
+                        <a rel="nofollow" href="http://www.facebook.com/share.php?u=http://whiteflashwhitehit.com/content/webgl/PP/forest.html" onclick="return fbs_click()" target="_blank"><img src="asset/bt_fb.png" title="share on facebook" /></a>
+                        <a href="http://twitter.com/share?text=Check+out+this+webgl+experience+made+by+%40rdad+%2f%2f+powered+by+three.js+%26+PP.js+%23welgl&url=http://whiteflashwhitehit.com/content/webgl/PP/forest.html" target="_blank"><img src="asset/bt_twitter.png" title="share on twitter" /></a>
+                        <g:plusone size="small" count="false" href="http://whiteflashwhitehit.com/content/webgl/PP/forest.html"></g:plusone>
+                </div>
+            </div>
+            
+            <div id="infoBt">
+                <a href="#" onclick="showInfo()"><img src="asset/info.png" /></a>
+            </div>
+		
+
+		<script type="text/javascript">
+
+			if ( ! Detector.webgl ) {
+
+				Detector.addGetWebGLMessage();
+				document.getElementById( 'container' ).innerHTML = "";
+
+			}
+
+			var container, stats;
+
+			var camera, scene, renderer;
+
+			var mesh, texture, ground,sky, light;
+
+			var worldWidth = 256, worldDepth = 256,
+			worldHalfWidth = worldWidth / 2, worldHalfDepth = worldDepth / 2;
+
+
+			init();
+			animate();
+
+			function init() {
+
+				container = document.getElementById( 'container' );
+
+                        
+                                camera = new THREE.FirstPersonCamera( {
+
+					fov: 60, aspect: window.innerWidth / window.innerHeight, near: 1, far: 10000,
+					movementSpeed: 150, lookSpeed: 0.1, noFly: true, lookVertical: false
+
+				} );
+
+                                camera.position.z = 200;
+
+				scene = new THREE.Scene();
+                                scene.fog = new THREE.FogExp2( 0xffffff, 0.001 ); // 0.0017
+
+                                light = new THREE.DirectionalLight( 0xffffff );
+				light.position.set( 1, 1, 1 );
+				scene.addChild( light );
+
+				light = new THREE.DirectionalLight( 0x000000 );
+				light.position.set( -1, -1, -1 );
+				scene.addChild( light );
+
+                                var plane = new THREE.PlaneGeometry( 20000, 20000, 1, 1 );
+                                var black = new THREE.MeshLambertMaterial( { color: 0x000000 } );
+
+				ground = new THREE.Mesh( plane,
+                                                         black);
+				ground.rotation.x = - 90 * Math.PI / 180;
+                                ground.position.y = -50;
+				scene.addObject( ground );
+                                
+                                sky = new THREE.Mesh( plane,
+                                                         black);
+				sky.rotation.x = - 90 * Math.PI / 180;
+                                sky.position.y = 200;
+                                sky.doubleSided = true;
+				scene.addObject( sky );
+
+
+                                // --- forest
+
+                                var geometry = new THREE.CubeGeometry( 5, 400,5 );
+				var material = new THREE.MeshLambertMaterial( { color: 0x111110 } );
+
+                                var j,s,tree, obj = {};
+
+                                for(j = 0; j<500; j++)
+                                {
+                                    tree = new THREE.Mesh( geometry, material );
+                                    tree.position.set((Math.random() - .5) * 2000, 150, (Math.random() - .5) * 2000);
+                                    s = (Math.random() * 2) +1;
+                                    tree.scale.set(s,1,s);
+                                    scene.addObject(tree);
+                                }
+				
+
+				renderer = new THREE.WebGLRenderer();
+				renderer.setSize( window.innerWidth, window.innerHeight );
+
+				container.appendChild( renderer.domElement );
+
+                                // post processing
+                                
+                                PP.init({   renderer: renderer,
+                                            scene: scene,
+                                            camera: camera,
+                                            guiEnabled: true,
+                                            clearColor: 0xffffff});
+                                PP.debug.init();
+                                
+                                PP.addTexture('diffuse')
+                                    .loadShader('treshold', {treshold: .69})
+                                    .loadShader('blurZoom',{strength: .6})
+                                    .loadShader('blend', {opacity: .67});
+
+			}
+
+			
+
+			function animate() {
+
+				requestAnimationFrame( animate );
+				render();
+			}
+
+			function render() {
+
+                                
+                                PP.start();
+
+                                PP.renderScene().toTexture('diffuse');
+
+                                PP.get('treshold').set('textureIn').toTexture('diffuse');
+
+                                PP.renderShader('treshold').toTexture('blurZoom');
+
+                                PP.renderShader('blurZoom');
+
+                                PP.get('blend').set('textureIn').toTexture('diffuse');
+                                PP.get('blend').set('textureAdd').toTexture('blurZoom');
+
+                                PP.renderShader('blend').toScene();
+
+			}
+
+		</script>
+
+	</body>
+</html>
