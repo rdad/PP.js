@@ -21,3 +21,4 @@ More details to come.
 [![The Elk](http://whiteflashwhitehit.com/content/webgl/PP/asset/thumb4.jpg)](http://www.whiteflashwhitehit.com/content/webgl/PP/foe_1.html)
 [![Image volume](http://whiteflashwhitehit.com/content/webgl/PP/asset/thumb5.jpg)](http://www.whiteflashwhitehit.com/content/webgl/PP/foe_2.html)
 [![Mystic forest](http://whiteflashwhitehit.com/content/webgl/PP/asset/thumb6.jpg)](http://www.whiteflashwhitehit.com/content/webgl/PP/forest.html)
+[![Mega particles](http://whiteflashwhitehit.com/content/webgl/PP/asset/thumb7.jpg)](http://www.whiteflashwhitehit.com/content/webgl/PP/mega_particle.html)
