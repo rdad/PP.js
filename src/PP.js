@@ -4,7 +4,7 @@
  */
 
 /*
- * @todo : gestion du uniforms.time
+ * @todo : affectation d'un nom perso pour les shaders (permet d'utiliser plusieur fois le même shader)
  **/
 
 var PP = PP || {
@@ -94,26 +94,11 @@ var PP = PP || {
         
         if(this.enabled === false)   return this;
 
-        var config, e;
-        
-        if(typeof parameters === 'object')
-        {
-            config = parameters;
-        }else{
-            config = {width: this.config.dimension.width, 
-                            height: this.config.dimension.height, 
-                            options: this.config.rtTexture
-                         };
-        }
-        
-        e           = {};
-        e.name      = name;
-        e.type      = this.TEXTURE;
-        e.textureOut= new THREE.WebGLRenderTarget( config.width, config.height, config.options );
+        var texture = new PP.Texture(name, parameters);
 
-        if(this.debug)  this.debug.addSprite(e);
+        if(this.debug)  this.debug.addSprite(texture);
          
-        this.list[name] = e;
+        this.list[name] = texture;
         
         this.error('Texture "'+name+'" successfully added');
 
@@ -125,9 +110,8 @@ var PP = PP || {
         if(this.enabled === false)   return this;
         
         var shader  = new PP.Shader(name, parameters);
-        shader.type = this.SHADER;
 
-        if(this.guiControl)     this.addGuiControl(shader);
+        if(this.guiControl)     this.addGuiControl(shader); 
         if(this.debug)          this.addSprite(shader);
         
         this.list[shader.name] = shader;

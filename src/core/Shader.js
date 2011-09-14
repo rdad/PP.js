@@ -36,6 +36,19 @@ PP.Shader = function ( name, parameters ) {
 
 };
 
+PP.Shader.prototype.copyTo = function(name){
+            
+            if(name == PP.rendered)   return;
+
+            var s           = PP.list[name];
+            
+            if(typeof s.textureOut != 'undefined')
+            {
+                    s.textureOut = this.textureOut;
+            } 
+
+        }
+
 PP.Shader.prototype.setUniforms = function( config) {
     
     for(var u in config){

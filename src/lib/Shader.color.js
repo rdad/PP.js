@@ -12,6 +12,7 @@ PP.lib.shader.shaders.color  = {
                                             contrast:   { type: "f", value: 0.0 },
                                             hue:        { type: "f", value: 0.0 },
                                             saturation: { type: "f", value: 0.0 },
+                                            exposure:   { type: "f", value: 0.0 },
                                             negative:   { type: "i", value: 0 }
                                       },
 
@@ -20,6 +21,7 @@ PP.lib.shader.shaders.color  = {
                                 contrast:   {min:-1, max: 1, step:.05},
                                 hue:        {min:-1, max: 1, step:.05},
                                 saturation: {min:-1, max: 1, step:.05},
+                                exposure:   {min:0, max: 1, step:.05},
                                 negative:   {}
                         },
 
@@ -34,7 +36,10 @@ PP.lib.shader.shaders.color  = {
                         "uniform float contrast;",
                         "uniform float hue;",
                         "uniform float saturation;",
+                        "uniform float exposure;",
                         "uniform int   negative;",
+                        
+                        "const float sqrtoftwo = 1.41421356237;",
 
                         "void main() {",
                             "vec4 color = texture2D(textureIn, vUv);",   
@@ -64,12 +69,66 @@ PP.lib.shader.shaders.color  = {
                             "if(negative == 1){",
                             "   color.rgb = 1.0 - color.rgb;",
                             "}",
+                            "if(exposure > 0.0){",
+                            "   color = log2(vec4(pow(exposure + sqrtoftwo, 2.0))) * color;",
+                            "}",
                             "gl_FragColor = color;",
                             "}",
 
                     ].join("\n")
                 
                 };
+
+
+PP.lib.shader.shaders.bleach  = {
+    
+                    info: {
+                        name: 'Bleach',
+                        author: 'Brian Chirls @bchirls',
+                        link: 'https://github.com/brianchirls/Seriously.js'
+                    },
+
+                    uniforms: {             textureIn:  { type: "t", value: 0, texture: null },
+                                            amount:     { type: "f", value: 1.0 }
+                                      },
+
+                    controls: {
+                                amount:     {min:0, max: 1, step:.1}
+                        },
+
+                    vertexShader: PP.lib.vextexShaderBase.join("\n"),
+
+                    fragmentShader: [
+                        
+                        'varying vec2 vUv;',
+                        
+                        'uniform sampler2D textureIn;',
+			'uniform float amount;',
+
+			'const vec4 one = vec4(1.0);',
+			'const vec4 two = vec4(2.0);',
+			'const vec4 lumcoeff = vec4(0.2125,0.7154,0.0721,0.0);',
+
+			'vec4 overlay(vec4 myInput, vec4 previousmix, vec4 amount) {',
+			'	float luminance = dot(previousmix,lumcoeff);',
+			'	float mixamount = clamp((luminance - 0.45) * 10.0, 0.0, 1.0);',
+
+			'	vec4 branch1 = two * previousmix * myInput;',
+			'	vec4 branch2 = one - (two * (one - previousmix) * (one - myInput));',
+                        
+			'	vec4 result = mix(branch1, branch2, vec4(mixamount) );',
+			'	return mix(previousmix, result, amount);',
+			'}',
+
+			'void main (void)  {',
+			'	vec4 pixel = texture2D(textureIn, vUv);',
+			'	vec4 luma = vec4(vec3(dot(pixel,lumcoeff)), pixel.a);',
+			'	gl_FragColor = overlay(luma, pixel, vec4(amount));',
+			'}'
+
+                    ].join("\n")
+                
+};
 
 PP.lib.shader.shaders.plasma  = {
     

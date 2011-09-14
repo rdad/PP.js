@@ -16,14 +16,15 @@ PP.Context = function ( parameters  ) {
 	this.camera.position.z          = PP.config.camera.z;
 
         // --- quad
-        
-        this.quad                       = new THREE. Mesh( new THREE.PlaneGeometry( this.dimension.width, this.dimension.height ), new THREE.MeshBasicMaterial() );
+
+        this.quad                       = new THREE.Mesh( new THREE.PlaneGeometry( 1, 1 ), new THREE.MeshBasicMaterial() );
         this.quad.position.z            = -500;
+        this.quad.scale.set( this.dimension.width, this.dimension.height, 1 );
 
         if(typeof parameters.quadReverse != 'undefined')
         {
             this.quad.doubleSided = true;
-            this.quad.scale.y = - 1;
+            this.quad.scale.y = - this.quad.scale.y;
         }
 	this.scene.addObject( this.quad );
 };

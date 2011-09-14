@@ -44,13 +44,15 @@ PP.debug.addSprite = function(shader){
     
     dim     = {width: PP.config.dimension.width/4, height: PP.config.dimension.height/4};
     m       = new THREE.MeshBasicMaterial({map: shader.textureOut});
-    plane   = new THREE.PlaneGeometry(dim.width, dim.height, 8, 8);
+    
+    plane   = new THREE.PlaneGeometry( 1, 1 );
     
     shader.debug = new THREE. Mesh( plane, m );
+    shader.debug.scale.set( dim.width, dim.height, 1 );
     
     if(this.nbSprite==0){
         shader.debug.doubleSided = true;
-        shader.debug.scale.y = - 1;
+        shader.debug.scale.y = - shader.debug.scale.y;
     }
     shader.debug.position.z = -450;
     shader.debug.position.x = -(PP.config.dimension.width/3) + (this.debugOffset.x * (dim.width + 20));
