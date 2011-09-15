@@ -32,7 +32,7 @@ PP.debug.init = function(){
     
     // console
     this.console = document.createElement( 'div' );
-    this.console.setAttribute('style', 'display:none; position:fixed; padding:5px; width:300px; height:400px; overflow:auto; background-color:#333333; font-size:12px; font-family:Arial; left:0px; bottom:0px; color:#ccc; text-align:left');
+    this.console.setAttribute('style', 'display:none; position:fixed; padding:5px; width:300px; height:400px; overflow:auto; background-color:#333333; font-size:12px; font-family:Arial; left:0px; bottom:0px; color:#ccc; text-align:left; z-index:1000');
     this.console.setAttribute('id', 'debug_console');
    
     document.body.appendChild( this.console );

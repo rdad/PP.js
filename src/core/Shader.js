@@ -1,11 +1,12 @@
 
 PP.Shader = function ( name, parameters ) {
 
+        parameters = parameters || {};
 	this.name       = name;
         this.type       = PP.SHADER;
         this.cible      = '';
-        this.forceClear = true;
-        var dim         = (typeof parameters.dimension != 'undefined') ? dimension : PP.config.dimension;
+
+        var dim         = (typeof parameters.dimension != 'undefined') ? parameters.dimension : PP.config.dimension;
 
 
         this.material   = new THREE.MeshShaderMaterial({ uniforms:       parameters.uniforms,
@@ -67,7 +68,7 @@ PP.Shader.prototype.set = function( key ) {
     if(this.material.uniforms[key]){
         this.cible = key;
     }else{
-        PP.error(this.name+".uniforms."+key+" doesn't exist");
+        PP.error(this.name+".uniforms."+key+" doesn't exist", true);
     }    
     return this;
 }
@@ -77,7 +78,7 @@ PP.Shader.prototype.get = function( key ) {
     if(this.material.uniforms[key]){
         return this.material.uniforms[key].value;
     }else{
-        PP.error(this.name+".uniforms."+key+" doesn't exist");
+        PP.error(this.name+".uniforms."+key+" doesn't exist", true);
         return 0;
     }    
 }

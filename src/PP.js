@@ -111,8 +111,8 @@ var PP = PP || {
         
         var shader  = new PP.Shader(name, parameters);
 
-        if(this.guiControl)     this.addGuiControl(shader); 
-        if(this.debug)          this.addSprite(shader);
+        if(this.guiControl)     this.gui.addControl(shader); 
+        if(this.debug)          this.debug.addSprite(shader);
         
         this.list[shader.name] = shader;
         
