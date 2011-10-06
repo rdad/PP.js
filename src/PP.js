@@ -249,6 +249,11 @@ var PP = PP || {
             this.enabled = false;
             PP.debug.showConsole();
         }
+    },
+    
+    getLastRenderedShaderName: function()
+    {
+        return this.rendered;
     }
 
 };

@@ -160,8 +160,8 @@ PP.lib.shader.shaders.simplexNoise = {
 
 			"void main( void ) {",
 
-				//"float n = heightMap( vec3(vUv.x, vUv.y, 0.0) );",
-                                "float n = heightMap( vTexCoord3D );",
+				"float n = heightMap( vec3(vUv.x, vUv.y, 0.0) );",
+                                //"float n = heightMap( vTexCoord3D );",
                                 "vec2 disto = vec2(n,n) * bias;",
                                 "vec3 c = texture2D(textureIn, vUv+disto).xyz;",
 
@@ -288,8 +288,8 @@ PP.lib.shader.shaders.rgbWiggle = {
     
                     info: {
                         name: 'rvb wiggle',
-                        author: 'Petri Wilhelmsen, @petriw',
-                        link: 'http://digitalerr0r.wordpress.com/2009/04/22/xna-shader-programming-tutorial-9-post-process-wiggle/'
+                        author: '@bartekd',
+                        link: 'http://www.everyday3d.com/j3d/demo/009_BasicFilter.html'
                     },
                     
                     uniforms:{

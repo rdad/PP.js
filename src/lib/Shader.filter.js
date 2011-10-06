@@ -1,4 +1,57 @@
 
+PP.lib.shader.shaders.film = {
+    
+                    info: {
+                        name: 'Film',
+                        author: "AlteredQualia, Original implementation and noise algorithm by Pat 'Hawthorne' Shearon",
+                        link: 'http://alteredqualia.com/'
+                    },
+
+                    uniforms:{
+                        textureIn:  { type: "t", value:0, texture: null },
+                        amount:     { type: "f", value: 0.5},
+                        time:       { type: "f", value: 0.0},
+                        speed:      { type: "f", value: 0.01 }
+                    },
+                    
+                     controls: {
+                                speed: {min:0, max: .1, step:.001},
+                                amount: {min:0, max: 1, step:.01}
+                        },
+                    
+                    update: function(e){
+
+                        e.material.uniforms.time.value += e.material.uniforms.speed.value;
+
+                    },
+
+                    vertexShader: PP.lib.vextexShaderBase.join("\n"),
+
+                    fragmentShader: [
+
+                        "varying vec2 vUv;",
+                        "uniform sampler2D textureIn;",
+                        "uniform float amount;",
+                        "uniform float time;",
+                                              
+                        "void main (void){",
+
+                            "vec4 cTextureScreen = texture2D( textureIn, vUv );",
+
+                            "float x = vUv.x * vUv.y * time *  1000.0;",
+                            "x = mod( x, 13.0 ) * mod( x, 123.0 );",
+                            "float dx = mod( x, 0.01 );",
+
+                            "vec3 cResult = cTextureScreen.rgb + cTextureScreen.rgb * clamp( 0.1 + dx * 100.0, 0.0, 1.0 );",
+                            "cResult = cTextureScreen.rgb + clamp( amount, 0.0,1.0 ) * ( cResult - cTextureScreen.rgb );",
+
+                            "gl_FragColor =  vec4( cResult, cTextureScreen.a );",
+
+                        "}"
+			].join("\n")
+
+                };
+                
 PP.lib.shader.shaders.cellShading = {
     
                     info: {
